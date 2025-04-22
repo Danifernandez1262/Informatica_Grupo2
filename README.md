@@ -1,1 +1,0 @@
-# Inform-tica_Grupo2
