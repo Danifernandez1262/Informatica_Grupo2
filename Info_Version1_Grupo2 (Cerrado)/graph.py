@@ -31,7 +31,7 @@ class Graph:
 
     def get_closest(self, x: float, y: float):
         closest = None
-        min_distance = float('inf')
+        min_distance = 100
 
         for node in self.nodes:
             distance = ((node.x - x)**2 + (node.y - y)**2)**0.5
