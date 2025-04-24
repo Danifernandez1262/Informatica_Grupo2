@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import simpledialog, filedialog, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-from graph import Graph, Node
+from graph import *
 import sys
 
 class GraphGUI:
@@ -33,6 +33,15 @@ class GraphGUI:
 
         self.draw_graph()
 
+    def on_click(self, event) -> None:
+        if event.inaxes != self.ax:
+            return
+        name = simpledialog.askstring("Node Name", "Enter name for the new node:")
+        if name:
+            AddNode(self.graph, Node(name, event.xdata, event.ydata))
+            self.draw_graph()
+
+
     def draw_graph(self):
         self.ax.clear()
         for segment in self.graph.segments:
@@ -56,7 +65,7 @@ class GraphGUI:
             return
         name = simpledialog.askstring("Node Name", "Enter name for the new node:")
         if name:
-            self.graph.AddNode(Node(name, event.xdata, event.ydata))
+            AddNode(self.graph,Node(name, event.xdata, event.ydata))
             self.draw_graph()
 
     def prompt_segment(self):
@@ -68,13 +77,13 @@ class GraphGUI:
         destination = simpledialog.askstring("Segment", f"Destination node ({', '.join(options)}):")
         name = simpledialog.askstring("Segment", "Segment name:")
         if origin and destination and name:
-            self.graph.AddSegment(name, origin, destination)
+            AddSegment(self.graph,name, origin, destination)
             self.draw_graph()
 
     def prompt_delete(self):
         name = simpledialog.askstring("Delete Node", "Enter node name to delete:")
         if name:
-            self.graph.delete_node(name)
+            delete_node(self.graph,name)
             self.draw_graph()
 
     def new_graph(self):
@@ -84,14 +93,14 @@ class GraphGUI:
     def save_graph(self):
         path = filedialog.asksaveasfilename(defaultextension=".txt")
         if path:
-            self.graph.save_to_file(path)
+            save_to_file(self.graph,path)
             messagebox.showinfo("Saved", f"Graph saved to {path}")
 
     def load_graph(self):
         path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
         if path:
             self.graph = Graph()
-            self.graph.cargar_fichero(path)
+            cargar_fichero(self.graph,path)
             self.draw_graph()
 
 
